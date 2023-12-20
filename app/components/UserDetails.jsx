@@ -18,45 +18,60 @@ const getUsers = async () => {
 };
 
 async function UserDetails() {
-  const { employee, personalDetails } = await getUsers();
-  if (!employee || !personalDetails) {
-    return <div>No user details available</div>;
-  }
-  const mergedData = employee?.map((emp) => {
-    const correspondingPersonalDetail = personalDetails?.find(
-      (pd) => pd.publicId === emp.publicId
-    );
-    return {
-      ...emp,
-      ...correspondingPersonalDetail,
-    };
-  });
+  try {
+    const { employee, personalDetails } = await getUsers();
 
-  return (
-    <>
-      {mergedData?.map((data, index) => (
-        <div
-          key={index}
-          className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start"
-        >
-          <div>
-            <h6 className="font-bold text-xl">Employee Name: {data?.name}</h6>
-            <h6 className="font-bold text-xl">Age: {data?.age}</h6>
-            <h6 className="font-bold text-xl">Position: {data?.position}</h6>
-            <h6 className="font-bold text-xl">Department: {data?.department}</h6>
-            <h6 className="font-bold text-xl">Email: {data?.email}</h6>
-            <h6 className="font-bold text-xl">Address: {data?.address}</h6>
+    if (!employee || !personalDetails) {
+      console.error("Employee or personalDetails is undefined");
+      return <div>No user details available</div>;
+    }
+
+    if (!Array.isArray(employee) || !Array.isArray(personalDetails)) {
+      console.error("Employee or personalDetails is not an array");
+      return <div>Invalid user details format</div>;
+    }
+
+    const mergedData = employee.map((emp) => {
+      const correspondingPersonalDetail = personalDetails.find(
+        (pd) => pd.publicId === emp.publicId
+      );
+      return {
+        ...emp,
+        ...correspondingPersonalDetail,
+      };
+    });
+
+    return (
+      <>
+        {mergedData.map((data, index) => (
+          <div
+            key={index}
+            className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start"
+          >
+            <div>
+              <h6 className="font-bold text-xl">Employee Name: {data.name}</h6>
+              <h6 className="font-bold text-xl">Age: {data.age}</h6>
+              <h6 className="font-bold text-xl">Position: {data.position}</h6>
+              <h6 className="font-bold text-xl">
+                Department: {data.department}
+              </h6>
+              <h6 className="font-bold text-xl">Email: {data.email}</h6>
+              <h6 className="font-bold text-xl">Address: {data.address}</h6>
+            </div>
+            <div className="flex gap-2">
+              <RemoveBtn publicId={data.publicId} />
+              <Link href={`/editUser/${data.publicId}`}>
+                <HiPencilAlt size={24} />
+              </Link>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <RemoveBtn publicId={data.publicId} />
-            <Link href={`/editUser/${data.publicId}`}>
-              <HiPencilAlt size={24} />
-            </Link>
-          </div>
-        </div>
-      ))}
-    </>
-  );
+        ))}
+      </>
+    );
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return <div>Error fetching user details</div>;
+  }
 }
 
 export default UserDetails;
