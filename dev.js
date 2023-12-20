@@ -1,1 +1,2 @@
-export const webUrl = "http://localhost:3000";
+export const webUrl =
+  "https://burhanuddinmarcha-api-assignment-burhanuddin-49.vercel.app/";
