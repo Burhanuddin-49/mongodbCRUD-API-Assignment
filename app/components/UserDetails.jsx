@@ -19,8 +19,8 @@ const getUsers = async () => {
 
 async function UserDetails() {
   const { employee, personalDetails } = await getUsers();
-  const mergedData = employee.map((emp) => {
-    const correspondingPersonalDetail = personalDetails.find(
+  const mergedData = employee?.map((emp) => {
+    const correspondingPersonalDetail = personalDetails?.find(
       (pd) => pd.publicId === emp.publicId
     );
     return {
@@ -31,7 +31,7 @@ async function UserDetails() {
 
   return (
     <>
-      {mergedData.map((data, index) => (
+      {mergedData?.map((data, index) => (
         <div
           key={index}
           className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start"
