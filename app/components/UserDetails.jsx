@@ -19,6 +19,9 @@ const getUsers = async () => {
 
 async function UserDetails() {
   const { employee, personalDetails } = await getUsers();
+  if (!employee || !personalDetails) {
+    return <div>No user details available</div>;
+  }
   const mergedData = employee?.map((emp) => {
     const correspondingPersonalDetail = personalDetails?.find(
       (pd) => pd.publicId === emp.publicId
@@ -37,12 +40,12 @@ async function UserDetails() {
           className="p-4 border border-slate-300 my-3 flex justify-between gap-5 items-start"
         >
           <div>
-            <h6 className="font-bold text-xl">Employee Name: {data.name}</h6>
-            <h6 className="font-bold text-xl">Age: {data.age}</h6>
-            <h6 className="font-bold text-xl">Position: {data.position}</h6>
-            <h6 className="font-bold text-xl">Department: {data.department}</h6>
-            <h6 className="font-bold text-xl">Email: {data.email}</h6>
-            <h6 className="font-bold text-xl">Address: {data.address}</h6>
+            <h6 className="font-bold text-xl">Employee Name: {data?.name}</h6>
+            <h6 className="font-bold text-xl">Age: {data?.age}</h6>
+            <h6 className="font-bold text-xl">Position: {data?.position}</h6>
+            <h6 className="font-bold text-xl">Department: {data?.department}</h6>
+            <h6 className="font-bold text-xl">Email: {data?.email}</h6>
+            <h6 className="font-bold text-xl">Address: {data?.address}</h6>
           </div>
           <div className="flex gap-2">
             <RemoveBtn publicId={data.publicId} />
